@@ -1,0 +1,579 @@
+
+ProjectEuler
+
+Soru 2;
+Fibonacci sayıları, her sayının kendinden önceki sayıyla toplanması ile oluşan bir sayı dizisidir. Birbirlerine bölündüğünde 1,618 sayısı elde edilir ki bu da altın oran demektir.
+İlk adımda, kaç elemanlı bir fibonacci dizisi oluşturmak istediğimizi giriyoruz.
+İlk adımda, kaç elemanlı bir fibonacci dizisi oluşturmak istediğimizi giriyoruz.
+Oluşturacağımız kodlarda, birinci ve ikinci olarak tanımladığımız elemanlar, bir diğer ifadeyle fibonacci serisinin ilk iki elemanı yazılmamış olacak. Bu yüzden birinci ve ikinci adlı elemanlarımızı yazdırıyoruz.
+Klavyeden girdiğimiz sayı değeri 0’dan büyükken yapacağımız bazı kodlarımız var. Ancak burada sayi-2 olarak tanımladık. Çünkü sayi<0 dediğimizde, dizinin ilk iki elemanı olan 0 ve 1’i yazdırmayacaktı ve konsolda görmek istediğimiz değerden daha fazla sayı gösterecekti.
+“ucuncu” adlı değişkenimizi yazdırıyoruz ve sayı değerini 1 azaltıyoruz.
+ Birinci değerimizi ikinci değerimize, ikinci değerimizi üçüncü değerimize eşitliyoruz. Böylece bir sonraki değerimizin değerini inceleyebilme fırsatı buluyoruz.
+	Function sumOfEven(limit) {
+		var temp, sum = 0,  a = 0,b = 1;
+		while (b < limit) {
+		a = b;
+		b += temp;
+		if ((b & 1) === 0) }
+		sum += b;
+		}
+}
+	Return sum;
+}
+Console.log(sumOfEven(4e6));
+
+4613732 = sonuç
+
+Soru 12 :
+Üçgensel sayıları bize veren formül
+n(n+1)/2
+Esasında bu Gauss Teoremi'nden geliyor. Üçgensel sayılar da toplamı ifade ettiği için, onları da bu formülle ifade edebiliyoruz.
+
+public final class p012 implements EulerSolution {
+		
+		public static void main(String[] args) {
+			System.out.println(new p012().run());
+		}
+		
+		public String run() {
+			int triangle = 0;
+			for (int i = 1; ; i++) {
+				if (Integer.MAX_VALUE - triangle < i)
+					throw new ArithmeticException("Overflow");
+				triangle += i;  
+				if (countDivisors(triangle) > 500)
+					return Integer.toString(triangle);
+			}
+		}
+		
+		private static int countDivisors(int n) {
+			int count = 0;
+			int end = Library.sqrt(n);
+			for (int i = 1; i < end; i++) {
+				if (n % i == 0)
+					count += 2;
+			}
+			if (end * end == n)  
+				count++;
+			return count;
+		}
+		
+	}
+Sonuç: 76576500
+Soru 32:
+
+import java.util.Arrays;
+	
+
+	
+
+	public final class p032 implements EulerSolution {
+		
+		public static void main(String[] args) {
+			System.out.println(new p032().run());
+		}
+		
+		
+		public String run() {
+			int sum = 0;
+			for (int i = 1; i < 10000; i++) {
+				if (hasPandigitalProduct(i))
+					sum += i;
+			}
+			return Integer.toString(sum);
+		}
+		
+		
+		private static boolean hasPandigitalProduct(int n) {
+			
+			for (int i = 1; i <= n; i++) {
+				if (n % i == 0 && isPandigital("" + n + i + n/i))
+					return true;
+			}
+			return false;
+		}
+		
+		
+		private static boolean isPandigital(String s) {
+			if (s.length() != 9)
+				return false;
+			char[] temp = s.toCharArray();
+			Arrays.sort(temp);
+			return new String(temp).equals("123456789");
+		}
+		
+	}
+
+
+Soru 92:
+public final class p092 implements EulerSolution {
+		
+		public static void main(String[] args) {
+			System.out.println(new p092().run());
+		}
+		
+		
+		private static final int LIMIT = Library.pow(10, 7);
+		
+		public String run() {
+			int count = 0;
+			for (int i = 1; i < LIMIT; i++) {
+				if (isClass89(i))
+					count++;
+			}
+			return Integer.toString(count);
+		}
+		
+		
+		private static boolean isClass89(int x) {
+			while (true) {
+				switch (x) {
+					case  1:  return false;
+					case 89:  return true;
+					default:  x = nextNumber(x);
+				}
+			}
+		}
+		
+		
+		private static int nextNumber(int x) {
+			int sum = 0;
+			while (x != 0) {
+				sum += (x % 10) * (x % 10);
+				x /= 10;
+			}
+			return sum;
+		}
+		
+	}
+Soru 182:
+public final class p182 implements EulerSolution {
+		
+		public static void main(String[] args) {
+			System.out.println(new p182().run());
+		}
+		
+		
+		private static final int P = 1009;
+		private static final int Q = 3643;
+		private static final int TOTIENT = (P - 1) * (Q - 1);
+		
+		
+		public String run() {
+			int[] numUnconcealedP = countAllUnconcealed(P);
+			int[] numUnconcealedQ = countAllUnconcealed(Q);
+			
+			int minUnconcealedP = Integer.MAX_VALUE;
+			for (int x : numUnconcealedP)
+				minUnconcealedP = Math.min(x, minUnconcealedP);
+			
+			int minUnconcealedQ = Integer.MAX_VALUE;
+			for (int x : numUnconcealedQ)
+				minUnconcealedQ = Math.min(x, minUnconcealedQ);
+			
+			long sum = 0;
+			for (int e = 0; e < TOTIENT; e++) {
+				if (numUnconcealedP[e % (P - 1)] == minUnconcealedP && numUnconcealedQ[e % (Q - 1)] == minUnconcealedQ)
+					sum += e;
+			}
+			return Long.toString(sum);
+		}
+		
+		
+		private static int[] countAllUnconcealed(int prime) {
+			int[] numUnconcealed = new int[prime - 1];
+			for (int e = 0; e < numUnconcealed.length; e++) {
+				if (Library.gcd(e, prime - 1) == 1)
+					numUnconcealed[e] = countUnconcealed(prime, e);
+				else
+					numUnconcealed[e] = Integer.MAX_VALUE;
+			}
+			return numUnconcealed;
+		}
+		
+		
+		private static int countUnconcealed(int modulus, int e) {
+			int count = 0;
+			for (int m = 0; m < modulus; m++) {
+				if (Library.powMod(m, e, modulus) == m)
+					count++;
+			}
+			return count;
+		}
+		
+	}
+
+LeetCode
+
+Soru 102:
+İkili ağaçların (Binary Tree) özel bir hali olan ikili arama ağaçlarında, düğümlerde duran bilgilerin birbirine göre küçüklük büyüklük ilişkisi bulunmalıdır. Örneğin tam sayılardan(integer) oluşan veriler tutulacaksa bu verilerin aralarında küçük-büyük ilişkisi bulunmaktadır.
+İkili arama ağacı, her düğümün solundaki koldan ulaşılabilecek bütün verilerin düğümün değerinden küçük, sağ kolundan ulaşılabilecek verilerin değerinin o düğümün değerinden büyük olmasını şart koşar.
+İkili arama ağacına bu kurala uygun olarak ekleme çıkarma veya silme işlemleri yapılabilir. Ancak yapılan her işlemden sonra ikili arama ağacının yapısı bozulmamış olmalıdır.
+let levelOrder = function(root) {
+    let result = [];
+    
+    if (root === null) {
+        return result;
+    }
+    
+    let queue = [];
+    queue.push(root);
+    
+    while (queue.length > 0) {
+        let row = [];
+        let rowSize = queue.length;
+        
+        while (rowSize > 0) {
+            let currentNode = queue.shift();
+            
+            if (currentNode.left !== null) {
+                queue.push(currentNode.left);
+            }
+            
+            if (currentNode.right !== null) {
+                queue.push(currentNode.right);
+            }
+            
+            row.push(currentNode.val);
+            rowSize--;
+        }
+        
+        result.push(row);
+    }
+    
+    return result;
+};
+
+Soru 172:
+let trailingZeroes = function(n) {
+    let numberOfFives = 0;
+    
+    while (n >= 5) {
+        numberOfFives += Math.floor(n / 5);
+        n = Math.floor(n / 5);
+    }
+    
+    return numberOfFives;
+};
+
+Soru 112:
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {number} sum
+ * @return {boolean}
+ */
+let hasPathSum = function(root, sum) {
+    if (root === null) {
+        return false;
+    }
+    
+    if (sum === root.val && root.left === null && root.right === null) {
+        return true;
+    }
+    
+    return hasPathSum(root.left, sum - root.val) || hasPathSum(root.right, sum - root.val);
+};
+Soru 622:
+public class _622 {
+	    public static class MyCircularQueue {
+	        private final int[] circularQueue;
+	        private int front, rear = -1, realLength = 0;
+	
+
+	        /**
+	         * Initialize your data structure here. Set the size of the queue to be k.
+	         */
+	        public MyCircularQueue(int k) {
+	            circularQueue = new int[k];
+	        }
+	
+
+	        /**
+	         * Insert an element into the circular queue. Return true if the operation is successful.
+	         */
+	        public boolean enQueue(int value) {
+	            if (!isFull()) {
+	                rear = (rear + 1) % circularQueue.length;
+	                circularQueue[rear] = value;
+	                realLength++;
+	                return true;
+	            } else {
+	                return false;
+	            }
+	        }
+	
+
+	        /**
+	         * Delete an element from the circular queue. Return true if the operation is successful.
+	         */
+	        public boolean deQueue() {
+	            if (!isEmpty()) {
+	                front = (front + 1) % circularQueue.length;
+	                realLength--;
+	                return true;
+	            } else {
+	                return false;
+	            }
+	        }
+	
+
+	        /**
+	         * Get the front item from the queue.
+	         */
+	        public int Front() {
+	            return isEmpty() ? -1 : circularQueue[front];
+	        }
+	
+
+	        /**
+	         * Get the last item from the queue.
+	         */
+	        public int Rear() {
+	            return isEmpty() ? -1 : circularQueue[rear];
+	        }
+	
+
+	        /**
+	         * Checks whether the circular queue is empty or not.
+	         */
+	        public boolean isEmpty() {
+	            return realLength == 0;
+	        }
+	
+
+	        /**
+	         * Checks whether the circular queue is full or not.
+	         */
+	        public boolean isFull() {
+	            return realLength == circularQueue.length;
+	        }
+	    }
+	
+
+	    /**
+	     * This implementation is similar with MyCircularQueue, but can be referenced
+	     */
+	    public static class MyCircularQueue2 {
+	
+
+	        private int[] data;
+	        private int head;
+	        private int tail;
+	        private int size;
+	
+
+	        /**
+	         * Initialize your data structure here. Set the size of the queue to be k.
+	         */
+	        public MyCircularQueue2(int k) {
+	            data = new int[k];
+	            head = -1;
+	            tail = -1;
+	            size = k;
+	        }
+	
+
+	        /**
+	         * Insert an element into the circular queue. Return true if the operation is successful.
+	         */
+	        public boolean enQueue(int value) {
+	            if (isFull() == true) {
+	                return false;
+	            }
+	            if (isEmpty() == true) {
+	                head = 0;
+	            }
+	            tail = (tail + 1) % size;
+	            data[tail] = value;
+	            return true;
+	        }
+	
+
+	        /**
+	         * Delete an element from the circular queue. Return true if the operation is successful.
+	         */
+	        public boolean deQueue() {
+	            if (isEmpty() == true) {
+	                return false;
+	            }
+	            if (head == tail) {
+	                head = -1;
+	                tail = -1;
+	                return true;
+	            }
+	            head = (head + 1) % size;
+	            return true;
+	        }
+	
+
+	        /**
+	         * Get the front item from the queue.
+	         */
+	        public int Front() {
+	            if (isEmpty() == true) {
+	                return -1;
+	            }
+	            return data[head];
+	        }
+	
+
+	        /**
+	         * Get the last item from the queue.
+	         */
+	        public int Rear() {
+	            if (isEmpty() == true) {
+	                return -1;
+	            }
+	            return data[tail];
+	        }
+	
+
+	        /**
+	         * Checks whether the circular queue is empty or not.
+	         */
+	        public boolean isEmpty() {
+	            return head == -1;
+	        }
+	
+
+	        /**
+	         * Checks whether the circular queue is full or not.
+	         */
+	        public boolean isFull() {
+	            return ((tail + 1) % size) == head;
+	        }
+	    }
+	
+
+	    public static void main(String[] args) {
+	        _622.MyCircularQueue circularQueue = new _622.MyCircularQueue(3); // set the size to be 3
+	        System.out.println(circularQueue.enQueue(1));  // return true
+	        System.out.println(circularQueue.enQueue(2));  // return true
+	        System.out.println(circularQueue.enQueue(3));  // return true
+	        System.out.println(circularQueue.enQueue(4));  // return false, the queue is full
+	        System.out.println(circularQueue.Rear());  // return 3
+	        System.out.println(circularQueue.Front());  // return 1
+	        System.out.println(circularQueue.isFull());  // return true
+	        System.out.println(circularQueue.deQueue());  // return true
+	        System.out.println(circularQueue.enQueue(4));  // return true
+	        System.out.println(circularQueue.Rear());  // return 4
+	    }
+	}
+
+Soru 752:
+public class _752 {
+	    public static int openLock(String[] deadends, String target) {
+	        Queue<String> aimQueue = new LinkedList<String>();
+	        Set<String> deads = new HashSet<String>(Arrays.asList(deadends));
+	        Set<String> visited = new HashSet<String>();
+	        aimQueue.offer("0000");
+	        visited.add("0000");
+	        int level = 0;
+	        while (!aimQueue.isEmpty()) {
+	            int size = aimQueue.size();
+	            while (size > 0) {
+	                String s = aimQueue.poll();
+	                if (deads.contains(s)) {
+	                    size--;
+	                    continue;
+	                }
+	                if (s.equals(target)) {
+	                    return level;
+	                }
+	                StringBuilder sb = new StringBuilder(s);
+	                /**
+	                 * This loop is in order to ergodic every possible results in 1 step
+	                 * for example, initial element is 0000, there have 8 possible results
+	                 * 1000、9000、0100、0900、0010、0090、0001、0009
+	                 */
+	                for (int i = 0; i < 4; i++) {
+	                    char c = sb.charAt(i);
+	                    String s1 = sb.substring(0, i) + (c == '9' ? 0 : c - '0' + 1) + sb.substring(i + 1);
+	                    String s2 = sb.substring(0, i) + (c == '0' ? 9 : c - '0' - 1) + sb.substring(i + 1);
+	                    if (!visited.contains(s1) && !deads.contains(s1)) {
+	                        aimQueue.offer(s1);
+	                        visited.add(s1);
+	                    }
+	                    if (!visited.contains(s2) && !deads.contains(s2)) {
+	                        aimQueue.offer(s2);
+	                        visited.add(s2);
+	                    }
+	                }
+	                size--;
+	            }
+	            level++;
+	        }
+	        return -1;
+	    }
+	
+
+	    /**
+	     * Runtime: 85ms
+	     *
+	     * @param deadends
+	     * @param target
+	     * @return
+	     */
+	    public static int openLock2(String[] deadends, String target) {
+	        Set<String> begin = new HashSet<String>();
+	        Set<String> end = new HashSet<String>();
+	        Set<String> deads = new HashSet<String>(Arrays.asList(deadends));
+	        begin.add("0000");
+	        end.add(target);
+	        int level = 0;
+	        while (!begin.isEmpty() && !end.isEmpty()) {
+	            Set<String> temp = new HashSet<String>();
+	            for (String s : begin) {
+	                if (end.contains(s)) return level;
+	                if (deads.contains(s)) continue;
+	                deads.add(s);
+	                StringBuilder sb = new StringBuilder(s);
+	                for (int i = 0; i < 4; i++) {
+	                    char c = sb.charAt(i);
+	                    String s1 = sb.substring(0, i) + (c == '9' ? 0 : c - '0' + 1) + sb.substring(i + 1);
+	                    String s2 = sb.substring(0, i) + (c == '0' ? 9 : c - '0' - 1) + sb.substring(i + 1);
+	                    if (!deads.contains(s1))
+	                        temp.add(s1);
+	                    if (!deads.contains(s2))
+	                        temp.add(s2);
+	                }
+	            }
+	            level++;
+	            begin = end;
+	            end = temp;
+	        }
+	        return -1;
+	    }
+	
+
+	    public static void main(String[] args) {
+	        String[] deadends = {"0201", "0101", "0102", "1212", "2002"};
+	        String target = "0202";
+	
+
+	        String[] deadends2 = {"8888"};
+	        String target2 = "0009";
+	
+
+	        String[] deadends3 = {"8887", "8889", "8878", "8898", "8788", "8988", "7888", "9888"};
+	        String target3 = "8888";
+	
+
+	        String[] deadends4 = {"0000"};
+	        String target4 = "8888";
+	
+
+	        System.out.println(_752.openLock(deadends, target));
+	        System.out.println(_752.openLock(deadends2, target2));
+	        System.out.println(_752.openLock(deadends3, target3));
+	        System.out.println(_752.openLock(deadends4, target4));
+	    }
+	}
+
