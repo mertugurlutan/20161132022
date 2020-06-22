@@ -242,69 +242,103 @@ import java.math.BigInteger;
 		}
 		
 	}
-
-Soru 02 :
-(function euler002() {
-	  var fib = [1, 2];
-	  var sum = 0;
+Soru 52:
+import java.util.Arrays;
 	
 
-	  function calc(arr) {
-	    return arr[arr.length - 1] + arr[arr.length - 2];
-	  }
 	
 
-	  while (fib[fib.length - 1] < 4e+6) {
-	    fib.push(calc(fib));
-	  }
-	
-
-	  fib.forEach(function (n) {
-	    if (n % 2 === 0) {
-	      sum += n;
-	    }
-	  });
-	
-
-	  console.log(sum);
-	  return sum;
-	}());
-
-Soru 12:
-var x = 0, y = 1;
-	
-
-	while (factors(x).length <= 500) {
-		x += y;
-	  	y++;
+	public final class p052 implements EulerSolution {
+		
+		public static void main(String[] args) {
+			System.out.println(new p052().run());
+		}
+		
+		
+		public String run() {
+			for (int i = 1; ; i++) {
+				if (i > Integer.MAX_VALUE / 6)
+					throw new ArithmeticException("Overflow");
+				if (multiplesHaveSameDigits(i))
+					return Integer.toString(i);
+			}
+		}
+		
+		
+		private static boolean multiplesHaveSameDigits(int x) {
+			for (int i = 2; i <= 6; i++) {
+				if (!Arrays.equals(toSortedDigits(x), toSortedDigits(i * x)))
+					return false;
+			}
+			return true;
+		}
+		
+		
+		private static char[] toSortedDigits(int x) {
+			char[] result = Integer.toString(x).toCharArray();
+			Arrays.sort(result);
+			return result;
+		}
+		
 	}
+Soru 62:
+import java.math.BigInteger;
+	import java.util.Arrays;
+	import java.util.HashMap;
+	import java.util.Map;
 	
 
-	console.log(x);
 	
 
-	function factors(n) {
-	  let arr = [], i = 1, max = n;
-	
-
-	  while (i < max) {
-	    if (n % i === 0) {
-	      arr.push(i); // i is a factor, pass it the array;
-	
-
-	      let k = n / i; // k is also a factor 
-	      if (i !== k) {
-	        arr.push(k); // only push k if it's not the current i
-	      }
-	      max = k;
-	    }
-	
-
-	    i++;
-	  }  
-	
-
-	  return arr.sort((a, b) => a - b);
+	public final class p062 implements EulerSolution {
+		
+		public static void main(String[] args) {
+			System.out.println(new p062().run());
+		}
+		
+		
+		public String run() {
+			int numDigits = 0;
+			Map<String,Integer> lowest = new HashMap<>();
+			Map<String,Integer> counts = new HashMap<>();
+			for (int i = 0; ; i++) {
+				String numClass = getCubeNumberClass(i);
+				
+				if (numClass.length() > numDigits) {
+					// Process and flush data for smaller number of digits
+					int min = Integer.MAX_VALUE;
+					for (String nc : counts.keySet()) {
+						if (counts.get(nc) == 5)
+							min = Math.min(lowest.get(nc), min);
+					}
+					if (min != Integer.MAX_VALUE)
+						return cube(min).toString();
+					
+					lowest.clear();
+					counts.clear();
+					numDigits = numClass.length();
+				}
+				
+				if (!lowest.containsKey(numClass)) {
+					lowest.put(numClass, i);
+					counts.put(numClass, 0);
+				}
+				counts.put(numClass, counts.get(numClass) + 1);
+			}
+		}
+		
+		
+		private static String getCubeNumberClass(int x) {
+			char[] digits = cube(x).toString().toCharArray();
+			Arrays.sort(digits);
+			return new String(digits);
+		}
+		
+		
+		private static BigInteger cube(int x) {
+			return BigInteger.valueOf(x).pow(3);
+		}
+		
 	}
 
 LeetCode
@@ -402,27 +436,43 @@ public static int numSquares(int n) {
 
     return dp[n];
 }
-Soru 112: 
-public class Solution {
-    public boolean hasPathSum(TreeNode root, int sum) {
-        if (root == null)
-            return false;
-        return hasPath(root, sum);
-    }
-    private boolean hasPath(TreeNode node, int left){
-        if (node.left == null && node.right == null){
-            if (node.val == left)
-                return true;
-            else
-                return false;
-        }// if
-        else if (node.left !=null && node.right == null)
-            return hasPath(node.left, left - node.val);
-        else if (node.left == null && node.right != null)
-            return hasPath(node.right, left - node.val);
-        else
-            return hasPath(node.left, left - node.val) || hasPath(node.right, left - node.val);
-    }
-}
+Soru 542: 
+public class _542 {
+	    public int[][] updateMatrix(int[][] matrix) {
+	        int m = matrix.length;
+	        int n = matrix[0].length;
+	
+
+	        Queue<int[]> queue = new LinkedList<>();
+	        for (int i = 0; i < m; i++) {
+	            for (int j = 0; j < n; j++) {
+	                if (matrix[i][j] == 0) {
+	                    queue.offer(new int[]{i, j});
+	                } else {
+	                    matrix[i][j] = Integer.MAX_VALUE;
+	                }
+	            }
+	        }
+	
+
+	        int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
+	
+
+	        while (!queue.isEmpty()) {
+	            int[] cell = queue.poll();
+	            for (int[] d : dirs) {
+	                int r = cell[0] + d[0];
+	                int c = cell[1] + d[1];
+	                if (r < 0 || r >= m || c < 0 || c >= n ||
+	                        matrix[r][c] <= matrix[cell[0]][cell[1]] + 1) continue;
+	                queue.add(new int[]{r, c});
+	                matrix[r][c] = matrix[cell[0]][cell[1]] + 1;
+	            }
+	        }
+	
+
+	        return matrix;
+	    }
+	}
 
 
